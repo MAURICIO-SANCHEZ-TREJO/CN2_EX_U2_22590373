@@ -22,19 +22,19 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
-          token: ${{ secrets.TOKEN_GITHUB }}
 
       - name: Create and push tag
         env:
           TAG_NAME: ${{ github.event.pull_request.title }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           if ! git check-ref-format "refs/tags/$TAG_NAME"; then
-            echo "Nombre de tag invalido: $TAG_NAME"
+            echo "Invalid tag name"
             exit 1
           fi
 
           if git rev-parse -q --verify "refs/tags/$TAG_NAME" >/dev/null; then
-            echo "El tag ya existe: $TAG_NAME"
+            echo "Tag already exists: $TAG_NAME"
             exit 1
           fi
 
